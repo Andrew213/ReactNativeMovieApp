@@ -1,19 +1,86 @@
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { useFetchMoviesList } from "@/api/hooks/query/useFetchFilmsList";
+import MovieCard from "@/components/MovieCard";
+import SearchBar from "@/components/SearchBar";
+import { icons } from "@/constants/icons";
+import { images } from "@/constants/images";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  const { data, isLoading } = useFetchMoviesList();
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
   return (
-    <View className="flex-1 justify-center items-center">
-      <Text className="text-red-200 text-red-600">asd.</Text>
-      <Link href={"/onboarding"}>Onboarding</Link>
-      <Link
-        href={{
-          pathname: "/movies/[id]",
-          params: { id: "avengers" },
-        }}
+    <View className="flex-1 bg-primary">
+      <Image
+        source={images.bg}
+        className="absolute w-full z-0"
+        resizeMode="cover"
+      />
+
+      <ScrollView
+        className="flex-1 px-5"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}
       >
-        Avg
-      </Link>
+        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+
+        {isLoading && (
+          <ActivityIndicator
+            size="large"
+            color="#0000ff"
+            className="mt-10 self-center"
+          />
+        )}
+
+        {!!data?.docs.length && (
+          <View className="flex-1 mt-5">
+            <SearchBar
+              onPress={() => {
+                router.push("/search");
+              }}
+              placeholder="Search for a movie"
+            />
+
+            <>
+              <Text className="text-lg text-white font-bold mt-5 mb-3">
+                Latest Movies
+              </Text>
+
+              <FlatList
+                data={data.docs}
+                renderItem={({ item }) => <MovieCard {...item} />}
+                keyExtractor={(item) => item.id.toString()}
+                numColumns={3}
+                columnWrapperStyle={{
+                  justifyContent: "flex-start",
+                  gap: 20,
+                  paddingRight: 5,
+                  marginBottom: 10,
+                }}
+                className="mt-2 pb-32"
+                scrollEnabled={false}
+              />
+            </>
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }

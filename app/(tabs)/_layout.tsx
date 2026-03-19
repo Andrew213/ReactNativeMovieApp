@@ -9,7 +9,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
   focused: boolean;
@@ -39,78 +39,75 @@ const TabIcon = ({ text, iconSrc, focused }: Props) => {
   }
 };
 
-const _layout = () => {
-  return (
-    <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom"]}>
-      <Tabs
-        screenOptions={{
-          tabBarShowLabel: false,
-          tabBarItemStyle: {
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-          tabBarStyle: {
-            backgroundColor: "#0F0D23",
-            borderRadius: 50,
-            marginHorizontal: 20,
-            height: 52,
-            position: "absolute",
-            overflow: "hidden",
-            borderWidth: 1,
-            borderColor: "#0F0D23",
-          },
-        }}
-      >
-        <Tabs.Screen
-          name="index"
-          options={{
-            headerShown: false,
-            title: "Home",
-            tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} text="Home" iconSrc={icons.home} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="search"
-          options={{
-            headerShown: false,
-            title: "Search",
-            tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} text="Search" iconSrc={icons.search} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="saved"
-          options={{
-            headerShown: false,
-            title: "Saved",
+const Layout = () => {
+  const insets = useSafeAreaInsets();
 
-            tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} text="Saved" iconSrc={icons.save} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="profile"
-          options={{
-            headerShown: false,
-            title: "Profile",
-            tabBarIcon: ({ focused }) => (
-              <TabIcon
-                focused={focused}
-                text="Profile"
-                iconSrc={icons.person}
-              />
-            ),
-          }}
-        />
-      </Tabs>
-    </SafeAreaView>
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarItemStyle: {
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        tabBarStyle: {
+          backgroundColor: "#0F0D23",
+          borderRadius: 50,
+          marginHorizontal: 20,
+          marginBottom: insets.bottom,
+          height: 52,
+          position: "absolute",
+          overflow: "hidden",
+          borderWidth: 1,
+          borderColor: "#0F0D23",
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          headerShown: false,
+          title: "Home",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} text="Home" iconSrc={icons.home} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          headerShown: false,
+          title: "Search",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} text="Search" iconSrc={icons.search} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="saved"
+        options={{
+          headerShown: false,
+          title: "Saved",
+
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} text="Saved" iconSrc={icons.save} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          headerShown: false,
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} text="Profile" iconSrc={icons.person} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 };
 
-export default _layout;
+export default Layout;
