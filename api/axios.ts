@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 
 // export const API_URL = "https://api.themoviedb.org/3/";
-export const API_URL = "https://api.poiskkino.dev/v1.5/";
+export const API_URL = "https://api.poiskkino.dev/";
 
 export const client = axios.create({
   baseURL: API_URL,
