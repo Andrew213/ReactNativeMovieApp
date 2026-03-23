@@ -9,15 +9,12 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Pressable,
   ScrollView,
   Text,
   View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
-  const insets = useSafeAreaInsets();
   const router = useRouter();
 
   const { data, isLoading } = useFetchMoviesList();
@@ -57,7 +54,6 @@ export default function Index() {
               }}
               placeholder="Search for a movie"
             />
-
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
                 Latest Movies

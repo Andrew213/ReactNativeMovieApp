@@ -2,7 +2,7 @@ import { MovieItem } from "@/api/types";
 
 export namespace SearchMovies {
   export const METHOD = "GET";
-  export const URL = (name: string) => `movie/search?query=${name}`;
+  export const URL = (name: string) => `v1.4/movie/search?query=${name}`;
   export const QUERY_KEY = "SEARCH FILMS ";
 
   export type Response = {
