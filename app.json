@@ -1,8 +1,8 @@
 {
   "expo": {
     "jsEngine": "hermes",
-    "name": "ReactNativeMovieApp",
-    "slug": "ReactNativeMovieApp",
+  "name": "Movie app",
+"slug": "movie-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -13,6 +13,7 @@
       "supportsTablet": true
     },
     "android": {
+          "package": "com.andrew.movieapp",
       "adaptiveIcon": {
         "backgroundColor": "#fff",
         "foregroundImage": "./assets/images/logo.png"
