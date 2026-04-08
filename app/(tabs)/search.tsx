@@ -6,7 +6,8 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native";
-import React, { useRef, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import { useSearchFilms } from "@/api/hooks/query/useSearchFilms";
@@ -14,6 +15,9 @@ import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { updateSearchCount } from "@/appwrite/appwrite";
+import { useDebounce } from "use-debounce";
 
 const Search = () => {
   const [value, setValue] = useState("");
@@ -35,8 +39,21 @@ const Search = () => {
     }, []),
   );
 
+<<<<<<< HEAD
   const { data, isLoading, error } = useSearchFilms(value);
 
+=======
+  const [debouncedQ] = useDebounce(value ?? "", 500);
+  const trimmed = debouncedQ.trim();
+  const { data, isLoading, error, isSuccess } = useSearchFilms(trimmed);
+
+  useEffect(() => {
+    const firstMovie = data?.docs?.[0];
+    if (trimmed.length <= 3 || !firstMovie) return;
+
+    updateSearchCount(trimmed, firstMovie);
+  }, [trimmed, data?.docs?.[0]?.id]);
+>>>>>>> fe32d56210da82daf3d7a5416399c41faef91295
   return (
     <View className="flex-1 bg-primary">
       <Image
