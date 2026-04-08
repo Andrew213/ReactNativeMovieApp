@@ -15,3 +15,14 @@ export namespace GetMoviesList {
     hasPrev: boolean;
   };
 }
+
+export namespace GetMovieDetail {
+  export const METHOD = "GET";
+  export const URL = (id: string | number) => `v1.4/movie/${id}`;
+  export const QUERY_KEY = "FETCH FILMS DETAIL";
+  export type Params = {
+    id: string | number;
+  };
+
+  export type Response = MovieItem;
+}

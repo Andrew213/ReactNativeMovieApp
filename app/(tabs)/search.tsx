@@ -39,10 +39,6 @@ const Search = () => {
     }, []),
   );
 
-<<<<<<< HEAD
-  const { data, isLoading, error } = useSearchFilms(value);
-
-=======
   const [debouncedQ] = useDebounce(value ?? "", 500);
   const trimmed = debouncedQ.trim();
   const { data, isLoading, error, isSuccess } = useSearchFilms(trimmed);
@@ -51,9 +47,8 @@ const Search = () => {
     const firstMovie = data?.docs?.[0];
     if (trimmed.length <= 3 || !firstMovie) return;
 
-    updateSearchCount(trimmed, firstMovie);
+    updateSearchCount(firstMovie);
   }, [trimmed, data?.docs?.[0]?.id]);
->>>>>>> fe32d56210da82daf3d7a5416399c41faef91295
   return (
     <View className="flex-1 bg-primary">
       <Image

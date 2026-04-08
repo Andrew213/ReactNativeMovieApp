@@ -1,5 +1,5 @@
 import { request } from "@/api/axios";
-import { GetMoviesList } from "@/api/request/Movies";
+import { GetMovieDetail, GetMoviesList } from "@/api/request/Movies";
 import { SearchMovies } from "@/api/request/SearchMovies";
 
 export default class MoviesService {
@@ -25,6 +25,19 @@ export default class MoviesService {
       return response;
     } catch (error) {
       console.error("Error while search movies ", error);
+      throw error;
+    }
+  }
+
+  public static async getMovieDetails(params: GetMovieDetail.Params) {
+    try {
+      const response = await request<GetMovieDetail.Response>({
+        method: GetMovieDetail.METHOD,
+        url: GetMovieDetail.URL(params.id),
+      });
+      return response;
+    } catch (error) {
+      console.error("Error while get movie details ", error);
       throw error;
     }
   }

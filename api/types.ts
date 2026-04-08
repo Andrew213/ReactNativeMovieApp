@@ -33,7 +33,7 @@ export interface MovieItem {
   similarMovies: RelatedMovie[];
   sequelsAndPrequels: RelatedMovie[];
   watchability: Watchability | null;
-  releaseYears: ReleaseYear[];
+  releaseYears?: ReleaseYear[];
   top10: number | null;
   top250: number | null;
   ticketsOnSale: boolean;
@@ -46,6 +46,13 @@ export interface MovieItem {
   updatedAt: string | null;
   createdAt: string | null;
 }
+
+export type TrendingMovie = {
+  poster_url: string;
+  title: string;
+  count: number;
+  movie_id: number;
+};
 
 export type MovieType =
   | "movie"

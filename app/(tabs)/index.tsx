@@ -1,6 +1,8 @@
 import { useFetchMoviesList } from "@/api/hooks/query/useFetchFilmsList";
+import { useFetchTrandingFilms } from "@/api/hooks/query/useFetchTrandingMovies";
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
+import TrandingCard from "@/components/TrandingCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { useRouter } from "expo-router";
@@ -17,11 +19,10 @@ import {
 export default function Index() {
   const router = useRouter();
 
-  const { data, isLoading } = useFetchMoviesList();
+  const { data: trendingData, isLoading: trendingLoading } =
+    useFetchTrandingFilms();
 
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
+  const { data, isLoading } = useFetchMoviesList();
 
   return (
     <View className="flex-1 bg-primary">
@@ -31,52 +32,65 @@ export default function Index() {
         resizeMode="cover"
       />
 
-      <ScrollView
-        className="flex-1 px-5"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}
-      >
-        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+      <View className="px-5 pt-20">
+        <Image source={icons.logo} className="w-12 h-10 mb-5 mx-auto" />
 
-        {isLoading && (
-          <ActivityIndicator
-            size="large"
-            color="#0000ff"
-            className="mt-10 self-center"
-          />
-        )}
+        <SearchBar
+          onPress={() => router.push("/search")}
+          placeholder="Search for a movie"
+        />
+      </View>
 
-        {!!data?.docs.length && (
-          <View className="flex-1 mt-5">
-            <SearchBar
-              onPress={() => {
-                router.push("/search");
-              }}
-              placeholder="Search for a movie"
-            />
+      {isLoading || trendingLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          className="mt-10 self-center"
+        />
+      ) : (
+        <FlatList
+          data={data?.docs}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <MovieCard {...item} />}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
+          columnWrapperStyle={{
+            justifyContent: "flex-start",
+            gap: 20,
+            paddingRight: 5,
+            marginBottom: 10,
+          }}
+          ListHeaderComponent={
             <>
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
+              {!!trendingData?.length && (
+                <View className="mt-5">
+                  <Text className="text-lg text-white font-bold mb-3">
+                    Trending movies
+                  </Text>
+
+                  <FlatList
+                    data={trendingData}
+                    horizontal
+                    ItemSeparatorComponent={() => <View className="w-5" />}
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item, index) =>
+                      item.movie_id.toString?.() ?? index.toString()
+                    }
+                    renderItem={({ item, index }) => (
+                      <TrandingCard movie={item} index={index} />
+                    )}
+                  />
+                </View>
+              )}
+
+              <Text className="text-lg text-white font-bold my-5">
                 Latest Movies
               </Text>
-
-              <FlatList
-                data={data.docs}
-                renderItem={({ item }) => <MovieCard {...item} />}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={3}
-                columnWrapperStyle={{
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  paddingRight: 5,
-                  marginBottom: 10,
-                }}
-                className="mt-2 pb-32"
-                scrollEnabled={false}
-              />
             </>
-          </View>
-        )}
-      </ScrollView>
+          }
+        />
+      )}
     </View>
   );
 }
